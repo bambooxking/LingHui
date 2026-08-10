@@ -18,6 +18,7 @@
 		7B25F8861DCA3BBCA5554BAB /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12029639838A0DD11CB2947E /* RootView.swift */; };
 		7EB784019837BACDAB8BD14C /* LHTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8353DBFA161AB96E47D480 /* LHTheme.swift */; };
 		811AA73237B3A7BD916FB572 /* UpscalePipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96382EAC20C0C97A8A46D2F4 /* UpscalePipeline.swift */; };
+		89BCDBDE68C7C980D3293596 /* DDColor_Tiny.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = F0BA8E21D61AC714EE510055 /* DDColor_Tiny.mlmodelc */; };
 		93B44B0969FDE8D36939292D /* EditorTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0A610F623004096050E662 /* EditorTypes.swift */; };
 		964B32CECE09BE5FB8FD667A /* ModelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090D4BC04FE1948929281C39 /* ModelStore.swift */; };
 		9C3108097882279A95D998E4 /* lama_dilated.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = CB9E2F7A64DB3A8B03504861 /* lama_dilated.mlmodelc */; };
@@ -26,6 +27,7 @@
 		BCF528254CB53EDEF997B0D4 /* InpaintingPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581E02C0EC17EC697F22DFCB /* InpaintingPipeline.swift */; };
 		C3BFA451C961A608C69F6C50 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E160D9D7ED45E3B1C19296F3 /* Assets.xcassets */; };
 		C7835646FF00D9AB2505D149 /* PP-OCRv5_mobile_det.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 7A5FA98AAF521A335B207086 /* PP-OCRv5_mobile_det.mlmodelc */; };
+		D34E093CE692AE8C98E103AA /* ColorizationPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433D93295E6BC2AF1220F6C5 /* ColorizationPipeline.swift */; };
 		EB395A25D8E78DEB9E058058 /* mobile_sam_encoder.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 3779E5F329A975B4F51E107A /* mobile_sam_encoder.mlmodelc */; };
 		F052605B918114AA0B0DCB80 /* EditorImageCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B5DF4242D9229E376F1F9E /* EditorImageCanvas.swift */; };
 /* End PBXBuildFile section */
@@ -37,9 +39,10 @@
 		23046B3B295A0C8F19D95D1B /* EditorControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorControls.swift; sourceTree = "<group>"; };
 		3779E5F329A975B4F51E107A /* mobile_sam_encoder.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = mobile_sam_encoder.mlmodelc; path = ../../models/mobile_sam_encoder.mlmodelc; sourceTree = SOURCE_ROOT; };
 		3D0EFA1F5E510E13D4AA8459 /* LingHuiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LingHuiApp.swift; sourceTree = "<group>"; };
+		433D93295E6BC2AF1220F6C5 /* ColorizationPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorizationPipeline.swift; sourceTree = "<group>"; };
 		51B5DF4242D9229E376F1F9E /* EditorImageCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorImageCanvas.swift; sourceTree = "<group>"; };
 		581E02C0EC17EC697F22DFCB /* InpaintingPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InpaintingPipeline.swift; sourceTree = "<group>"; };
-		6962481B938ED7511364A32A /* LingHui.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LingHui.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6962481B938ED7511364A32A /* LingHui.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LingHui.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A0A610F623004096050E662 /* EditorTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTypes.swift; sourceTree = "<group>"; };
 		7A5FA98AAF521A335B207086 /* PP-OCRv5_mobile_det.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "PP-OCRv5_mobile_det.mlmodelc"; path = "../../models/PP-OCRv5_mobile_det.mlmodelc"; sourceTree = SOURCE_ROOT; };
 		7A8353DBFA161AB96E47D480 /* LHTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LHTheme.swift; sourceTree = "<group>"; };
@@ -48,10 +51,12 @@
 		96382EAC20C0C97A8A46D2F4 /* UpscalePipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpscalePipeline.swift; sourceTree = "<group>"; };
 		9EA38D7266CBB11F5FFC5202 /* mobile_sam_decoder.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = mobile_sam_decoder.mlmodelc; path = ../../models/mobile_sam_decoder.mlmodelc; sourceTree = SOURCE_ROOT; };
 		A09CB187D1DF6B8D4C821962 /* TextRemovalPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRemovalPipeline.swift; sourceTree = "<group>"; };
+		A220FF331AFA57AAD18DCCF1 /* LingHui.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LingHui.entitlements; sourceTree = "<group>"; };
 		CB9E2F7A64DB3A8B03504861 /* lama_dilated.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lama_dilated.mlmodelc; path = ../../models/lama_dilated.mlmodelc; sourceTree = SOURCE_ROOT; };
 		D35804A62108D4D852350EC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E160D9D7ED45E3B1C19296F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		F7FF99CD35CB462379047E9E /* AppIcon.svg */ = {isa = PBXFileReference; lastKnownFileType = text; path = AppIcon.svg; sourceTree = "<group>"; };
+		F0BA8E21D61AC714EE510055 /* DDColor_Tiny.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = DDColor_Tiny.mlmodelc; path = ../../models/DDColor_Tiny.mlmodelc; sourceTree = SOURCE_ROOT; };
+		F7FF99CD35CB462379047E9E /* AppIcon.svg */ = {isa = PBXFileReference; path = AppIcon.svg; sourceTree = "<group>"; };
 		F941900057B9F51EA0DCDF8A /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
 		F9658DCE65DAD54E239ABDF0 /* Real-ESRGAN-x4plus.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Real-ESRGAN-x4plus.mlmodelc"; path = "../../models/Real-ESRGAN-x4plus.mlmodelc"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -62,6 +67,7 @@
 			children = (
 				EF52812BC5AA925731BC7BC2 /* LingHui */,
 				693A0A585F9BD336F69D1F21 /* models */,
+				F0BA8E21D61AC714EE510055 /* DDColor_Tiny.mlmodelc */,
 				CB9E2F7A64DB3A8B03504861 /* lama_dilated.mlmodelc */,
 				9EA38D7266CBB11F5FFC5202 /* mobile_sam_decoder.mlmodelc */,
 				3779E5F329A975B4F51E107A /* mobile_sam_encoder.mlmodelc */,
@@ -151,6 +157,7 @@
 		CE4628EAB3FD7EB4EC957BD8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				433D93295E6BC2AF1220F6C5 /* ColorizationPipeline.swift */,
 				95EEF4881871CC23832F9D06 /* ImageTensor.swift */,
 				581E02C0EC17EC697F22DFCB /* InpaintingPipeline.swift */,
 				090D4BC04FE1948929281C39 /* ModelStore.swift */,
@@ -171,6 +178,7 @@
 				7750384AC40059738B64EBC5 /* ViewModels */,
 				151FB949D528CE1777931237 /* Views */,
 				D35804A62108D4D852350EC6 /* Info.plist */,
+				A220FF331AFA57AAD18DCCF1 /* LingHui.entitlements */,
 			);
 			path = LingHui;
 			sourceTree = "<group>";
@@ -206,6 +214,7 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					D3F8AE2495C6D986C55F5D5B = {
+						DevelopmentTeam = 895JDV4V9F;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -236,6 +245,7 @@
 			files = (
 				7528316E45B0C944C64F80F7 /* AppIcon.svg in Resources */,
 				C3BFA451C961A608C69F6C50 /* Assets.xcassets in Resources */,
+				89BCDBDE68C7C980D3293596 /* DDColor_Tiny.mlmodelc in Resources */,
 				C7835646FF00D9AB2505D149 /* PP-OCRv5_mobile_det.mlmodelc in Resources */,
 				6395E7E13B746AE62322B372 /* Real-ESRGAN-x4plus.mlmodelc in Resources */,
 				9C3108097882279A95D998E4 /* lama_dilated.mlmodelc in Resources */,
@@ -252,6 +262,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D34E093CE692AE8C98E103AA /* ColorizationPipeline.swift in Sources */,
 				9CF07CFEF16117B5755D7F0A /* EditorControls.swift in Sources */,
 				F052605B918114AA0B0DCB80 /* EditorImageCanvas.swift in Sources */,
 				93B44B0969FDE8D36939292D /* EditorTypes.swift in Sources */,
@@ -309,7 +320,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 895JDV4V9F;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -372,7 +383,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 895JDV4V9F;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -408,8 +419,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LingHui/LingHui.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 895JDV4V9F;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				INFOPLIST_FILE = LingHui/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "灵绘";
@@ -428,8 +439,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LingHui/LingHui.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 895JDV4V9F;
+				ENABLE_DEBUG_DYLIB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				INFOPLIST_FILE = LingHui/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "灵绘";

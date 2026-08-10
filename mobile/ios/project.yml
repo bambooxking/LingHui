@@ -8,23 +8,71 @@ options:
 settings:
   base:
     SWIFT_VERSION: "5.10"
-    DEVELOPMENT_TEAM: ""
+    DEVELOPMENT_TEAM: 895JDV4V9F
     CODE_SIGN_STYLE: Automatic
     CURRENT_PROJECT_VERSION: 1
     MARKETING_VERSION: 1.0
     TARGETED_DEVICE_FAMILY: "1,2"
     SUPPORTS_MACCATALYST: false
     ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: true
+schemes:
+  LingHui:
+    build:
+      targets:
+        LingHui: all
+    run:
+      config: Debug
+      debugEnabled: false
+      enableGPUFrameCaptureMode: disabled
+      enableGPUValidationMode: false
+      disableMainThreadChecker: true
+      disableThreadPerformanceChecker: true
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    management:
+      shared: true
+      orderHint: 0
+  LingHui Debug:
+    build:
+      targets:
+        LingHui: all
+    run:
+      config: Debug
+      debugEnabled: true
+      enableGPUFrameCaptureMode: disabled
+      enableGPUValidationMode: false
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    management:
+      shared: true
+      orderHint: 1
 targets:
   LingHui:
     type: application
     platform: iOS
+    entitlements:
+      path: LingHui/LingHui.entitlements
+      properties:
+        com.apple.developer.kernel.increased-memory-limit: true
     sources:
       - path: LingHui
+        excludes:
+          - Services/SDXLModelManager.swift
       - path: ../../models/lama_dilated.mlmodelc
         type: folder
         buildPhase: resources
       - path: ../../models/Real-ESRGAN-x4plus.mlmodelc
+        type: folder
+        buildPhase: resources
+      - path: ../../models/DDColor_Tiny.mlmodelc
         type: folder
         buildPhase: resources
       - path: ../../models/PP-OCRv5_mobile_det.mlmodelc
@@ -45,13 +93,19 @@ targets:
         INFOPLIST_KEY_CFBundleDisplayName: 灵绘
         ENABLE_USER_SCRIPT_SANDBOXING: true
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+      configs:
+        Debug:
+          ENABLE_DEBUG_DYLIB: false
     info:
       path: LingHui/Info.plist
       properties:
         CFBundleDisplayName: 灵绘
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
-        UILaunchScreen: {}
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+          UIImageName: LaunchLogo
+          UIImageRespectsSafeAreaInsets: true
         NSPhotoLibraryUsageDescription: 灵绘需要读取照片，以便在本地进行图片处理。
         NSPhotoLibraryAddUsageDescription: 灵绘需要保存处理后的图片到您的相册。
         UIApplicationSceneManifest:

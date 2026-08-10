@@ -9,4 +9,3 @@ struct LingHuiApp: App {
         }
     }
 }
-

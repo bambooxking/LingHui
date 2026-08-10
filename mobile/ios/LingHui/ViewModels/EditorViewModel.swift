@@ -5,6 +5,7 @@ import UIKit
 @MainActor
 final class EditorViewModel: ObservableObject {
     let sourceImage: UIImage
+    var language: AppLanguage = .chinese
 
     @Published var mode: EditorMode
     @Published var resultImage: UIImage?
@@ -18,7 +19,7 @@ final class EditorViewModel: ObservableObject {
     @Published var canvasInteractionMode: CanvasInteractionMode = .edit
     @Published var viewportResetToken = 0
     @Published var isProcessing = false
-    @Published var processingLabel = "正在处理"
+    @Published var processingLabel = AppCopy.text("正在处理", language: .chinese)
     @Published var error: ProcessingError?
     @Published var toast: String?
 
@@ -35,6 +36,8 @@ final class EditorViewModel: ObservableObject {
         case .text:
             return !maskDocument.rectangles.isEmpty
         case .enhance:
+            return true
+        case .colorize:
             return true
         }
     }
@@ -83,13 +86,13 @@ final class EditorViewModel: ObservableObject {
             canvasInteractionMode = defaultInteractionMode
             viewportResetToken += 1
         }
-        toast = "已恢复原图"
+        toast = text("已恢复原图")
     }
 
     func recognizeText() {
         guard !isProcessing else { return }
         isProcessing = true
-        processingLabel = "正在识别文字"
+        processingLabel = text("正在识别文字")
         toast = nil
         Task {
             defer { isProcessing = false }
@@ -99,7 +102,9 @@ final class EditorViewModel: ObservableObject {
                     maskDocument.strokes.removeAll()
                     maskDocument.rectangles = boxes
                 }
-                toast = "识别到 \(boxes.count) 处文字，可确认后消除"
+                toast = language == .english
+                    ? "Detected \(boxes.count) text regions. Review and erase."
+                    : "识别到 \(boxes.count) 处文字，可确认后消除"
             } catch {
                 self.error = ProcessingError(message: readableMessage(for: error))
             }
@@ -115,7 +120,7 @@ final class EditorViewModel: ObservableObject {
             do {
                 switch mode {
                 case .erase:
-                    processingLabel = "正在补全背景"
+                    processingLabel = text("正在补全背景")
                     let mask = maskDocument.renderedMask(size: sourceImage.size)
                     resultImage = try await InpaintingPipeline().run(
                         image: sourceImage,
@@ -123,15 +128,17 @@ final class EditorViewModel: ObservableObject {
                     )
                 case .text:
                     if textMode == .automatic {
-                        processingLabel = "正在合并框选并消除文字"
+                        processingLabel = text("正在合并框选并消除文字")
                         let output = try await TextRemovalPipeline().run(
                             image: sourceImage,
                             boxes: maskDocument.rectangles
                         )
                         resultImage = output.image
-                        toast = "已处理 \(output.detectedRegionCount) 处文字区域"
+                        toast = language == .english
+                            ? "Erased \(output.detectedRegionCount) text regions"
+                            : "已处理 \(output.detectedRegionCount) 处文字区域"
                     } else {
-                        processingLabel = "正在消除框选文字"
+                        processingLabel = text("正在消除框选文字")
                         let mask = maskDocument.renderedMask(size: sourceImage.size)
                         resultImage = try await InpaintingPipeline().run(
                             image: sourceImage,
@@ -139,11 +146,15 @@ final class EditorViewModel: ObservableObject {
                         )
                     }
                 case .enhance:
-                    processingLabel = "正在逐块恢复细节"
+                    processingLabel = text("正在逐块恢复细节")
                     resultImage = try await UpscalePipeline().run(
                         image: sourceImage,
                         scale: enhanceScale
                     )
+                    comparisonPosition = 0.5
+                case .colorize:
+                    processingLabel = text("正在为照片上色")
+                    resultImage = try await ColorizationPipeline().run(image: sourceImage)
                     comparisonPosition = 0.5
                 }
             } catch {
@@ -154,19 +165,21 @@ final class EditorViewModel: ObservableObject {
 
     func saveResult() {
         guard let resultImage else {
-            toast = "请先完成一次处理"
+            toast = text("请先完成一次处理")
             return
         }
         Task {
             do {
                 let status = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
                 guard status == .authorized || status == .limited else {
-                    throw ProcessingError(message: "没有保存照片的权限，请在系统设置中允许灵绘添加照片。")
+                    throw ProcessingError(
+                        message: text("没有保存照片的权限，请在系统设置中允许灵绘添加照片。")
+                    )
                 }
                 try await PHPhotoLibrary.shared().performChanges {
                     PHAssetChangeRequest.creationRequestForAsset(from: resultImage)
                 }
-                toast = "已保存到相册"
+                toast = text("已保存到相册")
             } catch {
                 self.error = ProcessingError(message: readableMessage(for: error))
             }
@@ -178,6 +191,10 @@ final class EditorViewModel: ObservableObject {
             return processing.message
         }
         return error.localizedDescription
+    }
+
+    private func text(_ chinese: String) -> String {
+        AppCopy.text(chinese, language: language)
     }
 
     private var defaultInteractionMode: CanvasInteractionMode {
