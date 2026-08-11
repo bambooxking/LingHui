@@ -1,0 +1,283 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Ling Hui AI - Text Removal Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Geist:wght@100;300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#e0e3e5",
+                    "surface-container-low": "#f2f3ff",
+                    "background": "#faf8ff",
+                    "surface-container-highest": "#dae2fd",
+                    "on-primary-fixed": "#002022",
+                    "on-tertiary": "#ffffff",
+                    "inverse-surface": "#283044",
+                    "surface-container": "#eaedff",
+                    "tertiary-container": "#d8dadc",
+                    "surface-variant": "#dae2fd",
+                    "primary-fixed": "#7df4ff",
+                    "tertiary-fixed-dim": "#c4c7c9",
+                    "primary-fixed-dim": "#00dbe9",
+                    "on-surface-variant": "#3b494b",
+                    "on-surface": "#131b2e",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#5c5f61",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#e9ddff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed": "#191c1e",
+                    "on-secondary-fixed-variant": "#5700c9",
+                    "on-secondary": "#ffffff",
+                    "surface-tint": "#006970",
+                    "primary": "#006970",
+                    "on-secondary-fixed": "#23005b",
+                    "inverse-on-surface": "#eef0ff",
+                    "on-secondary-container": "#ddcdff",
+                    "on-tertiary-container": "#5c5f61",
+                    "primary-container": "#00f0ff",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#e2e7ff",
+                    "on-background": "#131b2e",
+                    "outline": "#6a7a7b",
+                    "on-primary-fixed-variant": "#004f54",
+                    "surface-dim": "#d2d9f4",
+                    "error-container": "#ffdad6",
+                    "outline-variant": "#b9cacb",
+                    "on-tertiary-fixed-variant": "#444749",
+                    "inverse-primary": "#00dbe9",
+                    "secondary-container": "#7000ff",
+                    "secondary": "#5400c3",
+                    "on-error": "#ffffff",
+                    "surface-bright": "#faf8ff",
+                    "surface": "#faf8ff",
+                    "secondary-fixed-dim": "#d1bcff",
+                    "on-primary-container": "#006970"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "max-width": "1440px",
+                    "unit": "4px",
+                    "margin-desktop": "64px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Space Grotesk"],
+                    "display-lg-mobile": ["Space Grotesk"],
+                    "body-base": ["Geist"],
+                    "display-lg": ["Space Grotesk"],
+                    "code-label": ["JetBrains Mono"],
+                    "body-sm": ["Geist"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "body-base": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "code-label": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      body {
+        font-family: 'Geist', sans-serif;
+        background-color: #faf8ff;
+      }
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px);
+      }
+      .shimmer-sweep {
+        background: linear-gradient(90deg, transparent, rgba(0, 105, 112, 0.1), transparent);
+        background-size: 200% 100%;
+        animation: shimmer 2s infinite linear;
+      }
+      @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #006970;
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+    </style>
+</head>
+<body class="text-on-surface overflow-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop h-20 bg-white/70 backdrop-blur-md border-b border-outline-variant/20 shadow-[0_8px_30px_rgb(0,105,112,0.05)]">
+<div class="flex items-center gap-8">
+<span class="font-headline-md text-headline-md font-bold text-primary">Ling Hui</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200" href="#">Object Removal</a>
+<a class="text-primary border-b-2 border-primary pb-1 font-bold" href="#">Text Removal</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200" href="#">Image Restoration</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-4 ml-4 border-l border-outline-variant/20 pl-4"><div class="flex items-center gap-1 px-3 py-1.5 bg-surface-container rounded-full cursor-pointer hover:bg-surface-container-high transition-colors group"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">language</span><span class="font-body-sm text-[13px] font-medium text-on-surface-variant">EN</span><span class="material-symbols-outlined text-[18px] text-on-surface-variant group-hover:translate-y-0.5 transition-transform">expand_more</span></div></div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-20 h-[calc(100vh-80px)] w-64 bg-surface/80 backdrop-blur-xl border-r border-outline-variant/20 flex flex-col py-6 px-4 gap-4 z-40">
+<nav class="flex-1 flex flex-col gap-1"></nav>
+<div class="mt-auto flex flex-col gap-2">
+
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 mt-20 p-8 h-[calc(100vh-80px)] flex gap-6">
+<!-- Batch Workspace -->
+<section class="flex-1 flex flex-col gap-6">
+<!-- Directory Input Header (Streamlined) -->
+<div class="glass-panel p-5 rounded-2xl border border-outline-variant/20 flex items-center justify-between">
+<div class="flex items-center gap-4 flex-1">
+<div class="flex items-center bg-surface-container-lowest border border-outline/30 rounded-lg px-4 h-11 flex-1 max-w-2xl">
+<span class="material-symbols-outlined text-on-surface-variant mr-3 text-lg">folder</span>
+<input class="bg-transparent border-none focus:ring-0 w-full font-code-label text-on-surface text-sm" readonly="" type="text" value="C:/Projects/E-commerce/Spring_Campaign/RAW_Assets">
+<button class="ml-2 px-3 py-1 text-primary hover:bg-primary/5 rounded font-medium text-xs">Change</button>
+</div>
+</div>
+<div class="flex items-center gap-6 pl-6 border-l border-outline-variant/20">
+<div class="text-right">
+<p class="font-headline-md text-headline-md leading-none text-2xl">24</p>
+<p class="font-code-label text-[10px] text-on-surface-variant uppercase">Assets</p>
+</div>
+<button class="w-10 h-10 rounded-full border border-primary/20 flex items-center justify-center text-primary hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-xl">refresh</span>
+</button>
+</div>
+</div>
+<!-- Image Grid -->
+<div class="flex-1 glass-panel rounded-2xl border border-outline-variant/20 p-6 overflow-y-auto custom-scrollbar">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+<!-- Processing Item -->
+<div class="group relative aspect-[4/5] rounded-xl overflow-hidden border border-primary/20 shadow-lg bg-surface-container">
+<div class="absolute inset-0 shimmer-sweep"></div>
+<div class="absolute top-3 left-3 z-10 flex gap-2">
+<span class="bg-primary/90 text-white px-2 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 shadow-sm uppercase tracking-tighter">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+                                AI Active
+                            </span>
+</div>
+<div class="absolute inset-0 flex items-center justify-center flex-col gap-2 z-10 bg-on-surface/10">
+<div class="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+<span class="font-code-label text-[10px] text-white drop-shadow-md">72%</span>
+</div>
+<div class="w-full h-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCBWHopI5aVl-OVnrA6zSxhvmP5Ljs-xjoB3ztC6Q_Vf5DTae5PFxbVpQe3ayr-giJ_bFUDmOh12X4ShgrITRqWz_0ooeDQee08_5i5quoFSjmxOtP7BPOJpAFk0njgAP7dglwcZ3vnCWDTm3yQRqnHSiDqqJzYHij2HYJSpDXjctnrVP63vlFYxDCt8UoY8vY7uvu-MfhzbiPl5BhDbgNIrJvxMjyGVq2VrVoACUPHlJWO0r6vXE3xAOrc0PAhxDSjXtC8eshMSw')"></div>
+</div>
+<!-- Pending Items Loop -->
+<div class="group relative aspect-[4/5] rounded-xl overflow-hidden border border-outline-variant/30 hover:border-primary transition-all duration-300 bg-surface-container-low">
+<div class="absolute top-3 left-3 z-10">
+<span class="bg-on-surface/40 text-white px-2 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 backdrop-blur-sm uppercase tracking-tighter">
+<span class="material-symbols-outlined text-[12px]">schedule</span>
+                                Queued
+                            </span>
+</div>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+<button class="w-8 h-8 rounded-full bg-white text-primary flex items-center justify-center hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-white text-error flex items-center justify-center hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</div>
+<div class="w-full h-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBw0yDOdqoTUN_TuJDVgIjqs50YOKFUsF3QtudPRAAi78M5zsLbSkl2KLsoui8crZVW30zlv4fEhWGEQBOFbpYANZg6LzYC1YVxkmhmqhXzG9dwvMmYmJ2qajIwkjQcnX5Ai2h7lj8rd-yDBP11uqTLn4jNJpLmCBdeY9wnlFizlQY9E7Wp8CQGachgN5_A6DWajVIdmwei5gtD4T6aY-i58DafksRdnbVt9raMsVhFFGvyTGU8ED1lXgNZ3yRhy3Y7m6ACN3b5tQ')"></div>
+</div>
+<div class="group relative aspect-[4/5] rounded-xl overflow-hidden border border-outline-variant/30 bg-surface-container-low">
+<div class="absolute top-3 left-3 z-10">
+<span class="bg-on-surface/40 text-white px-2 py-1 rounded-full text-[10px] font-bold backdrop-blur-sm uppercase tracking-tighter">Queued</span>
+</div>
+<div class="w-full h-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA3u8TJjKfugRLcNQJiM-kOSvW2qb6GDv_Ip9D2G-HCUmupOM19KYt1vm5l0xKv4lEVSiZbfDKRzAlSWbLx77DAdRHtX3L0p4BRngnSgVZA_GJust8Shn-CLCTYo-WN8r0dHfriflXQcaKn_hX6_jb45IxDkjIBoanX9sYM6cY01pwxYspO13XvVfhnaUK_XEkgn0WjHYjAmiPgsNo5Tfr_I1e0WxnRauBm3oVUZXnKVDaU5X7SodRH-dUvWB7cybqwfCGQUsnrxw')"></div>
+</div>
+<div class="group relative aspect-[4/5] rounded-xl overflow-hidden border border-outline-variant/30 bg-surface-container-low">
+<div class="absolute top-3 left-3 z-10">
+<span class="bg-on-surface/40 text-white px-2 py-1 rounded-full text-[10px] font-bold backdrop-blur-sm uppercase tracking-tighter">Queued</span>
+</div>
+<div class="w-full h-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDjL-tXFNEHmefvvTv3nyVGj6D_vQp9hl1m0sNn_rq2iB2dOrVdWLe8alhk4EI0lM7CvuC_LeA3U_ugJY4zGExESHM07lc9394jE_OM6pVi5CxieNbBYPp41MPITb-t7taNMNGa6NS9fyQOa5JPfhwFy990oHqP6FgJHQY-9BlkOg02R1-FaS5tvWNl6yBlhqElEiae1XvbDaePnSfSDy2pUoFwZVX9CQSJ4sGtHsW82LdizANzN2yNn7Ibi_JIaiNYR5REKxW9Fw')"></div>
+</div>
+<!-- Add More Card -->
+<button class="aspect-[4/5] rounded-xl border-2 border-dashed border-outline-variant/40 flex flex-col items-center justify-center gap-2 text-on-surface-variant hover:border-primary hover:text-primary transition-all bg-surface/30">
+<span class="material-symbols-outlined text-3xl">add_circle</span>
+<span class="font-body-sm text-xs font-medium">Add Assets</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Right Settings Panel -->
+<aside class="w-80 flex flex-col gap-6">
+<!-- Model Config -->
+<!-- Engine Log -->
+<div class="glass-panel flex-1 rounded-2xl border border-outline-variant/20 p-4 flex flex-col gap-3 overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-code-label text-[10px] text-on-surface-variant uppercase tracking-wider">Live Log</span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+</div>
+<div class="flex-1 bg-on-surface/5 rounded-lg p-3 font-code-label text-[10px] leading-relaxed text-on-surface-variant/80 overflow-y-auto custom-scrollbar">
+<p class="text-primary/70">[14:22:01] System Initialized.</p>
+<p class="">[14:22:08] Directory Scanned: 24 items found.</p>
+<p class="">[14:22:10] Processing IMG_9921.jpg...</p>
+<p class="text-primary/70">[14:22:15] Segmentation mask generated.</p>
+<p class="opacity-40 animate-pulse">_</p>
+</div>
+</div>
+<!-- Start Batch FAB -->
+<button class="h-16 w-full bg-primary text-white rounded-2xl flex items-center justify-center gap-3 font-bold text-lg shadow-[0_12px_40px_-8px_rgba(0,105,112,0.4)] hover:shadow-[0_12px_40px_-4px_rgba(0,105,112,0.6)] hover:-translate-y-1 transition-all active:scale-95 group">
+<span class="material-symbols-outlined text-2xl group-hover:rotate-12 transition-transform">rocket_launch</span>
+                Start Batch
+            </button>
+</aside>
+</main>
+<!-- Modal -->
+<div class="hidden fixed inset-0 z-[100] flex items-center justify-center p-8" id="processingModal">
+<div class="absolute inset-0 bg-on-surface/20 backdrop-blur-sm"></div>
+<div class="relative glass-panel w-full max-w-2xl rounded-3xl border border-primary/20 p-10 flex flex-col items-center gap-6 shadow-2xl">
+<div class="relative">
+<div class="w-24 h-24 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+<span class="material-symbols-outlined absolute inset-0 flex items-center justify-center text-primary text-4xl">memory</span>
+</div>
+<div class="text-center">
+<h3 class="font-headline-md text-headline-md text-primary">Orchestrating Batch Process</h3>
+<p class="font-body-base text-body-base text-on-surface-variant max-w-md mt-2">Allocating VRAM and initializing parallel worker threads.</p>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 mt-4">
+<div class="bg-primary h-full w-[45%] rounded-full shadow-[0_0_10px_#006970]"></div>
+</div>
+<p class="font-code-label text-code-label text-primary font-bold">45% Initialized</p>
+</div>
+</div>
+<script>
+        const fab = document.querySelector('button.bg-primary.text-white.rounded-2xl');
+        const modal = document.getElementById('processingModal');
+
+        fab.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 3000);
+        });
+
+        console.log('Ling Hui Workspace Initialized - Streamlined Mode');
+    </script>
+
+
+</body></html>

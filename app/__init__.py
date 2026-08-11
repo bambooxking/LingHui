@@ -1,0 +1,1 @@
+"""Inpainting web application."""

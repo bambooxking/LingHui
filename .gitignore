@@ -1,1 +1,9 @@
 models*
+.venv/
+__pycache__/
+models/
+outputs/
+*.pyc
+gfpgan
+*.lock
+tests
