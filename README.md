@@ -8,6 +8,7 @@
   - `simple-lama-inpainting`：快速、无需提示词。
   - `diffusers/stable-diffusion-xl-1.0-inpainting-0.1`：纹理补全更好，支持提示词；首次下载约 7GB。
 - 画质修复：`Real-ESRGAN`（通用超分）、`GFPGAN`（人像面部）。
+- 视频画质修复：FFmpeg 逐帧解码，使用 `RealBasicVSR` 时序超分，可选 `CodeFormer` 人脸修复与 `RIFE` 2 倍补帧，完成后可在页面滑动对比。
 - 可扩展：在 `app/services.py` 实现新的 `Adapter` 并注册到 `ADAPTERS` 即可增加算法。
 
 ## 安装与启动
@@ -28,6 +29,20 @@ uv run python -c "import torch; print(torch.cuda.is_available())"
 ```
 
 默认依赖为 CUDA 12.4 版 PyTorch；若输出 `False`，请确认驱动或调整 `pyproject.toml` 中的 PyTorch 索引，然后再次运行 `uv sync`。
+
+### 视频画质修复
+
+先安装 FFmpeg，并将三个官方仓库及权重准备为以下结构：
+
+```text
+models/video/RealBasicVSR/inference_realbasicvsr.py
+models/video/RealBasicVSR/checkpoints/RealBasicVSR_x4.pth
+models/video/CodeFormer/inference_codeformer.py
+models/video/Practical-RIFE/inference_video.py
+models/video/Practical-RIFE/train_log/flownet.pkl
+```
+
+分别按 [RealBasicVSR](https://github.com/ckkelvinchan/RealBasicVSR)、[CodeFormer](https://github.com/sczhou/CodeFormer) 和 [Practical-RIFE](https://github.com/hzwer/Practical-RIFE) 官方说明安装依赖。它们可使用独立 Python 环境，并通过 `REALBASICVSR_PYTHON`、`CODEFORMER_PYTHON`、`RIFE_PYTHON` 指定解释器；仓库目录也可通过对应的 `*_DIR` 环境变量覆盖。处理结果保存到 `outputs/videos/`。
 
 ## 模型保存位置
 

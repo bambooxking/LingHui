@@ -3,6 +3,8 @@ import json
 import time
 import base64
 import io
+import re
+import tempfile
 from pathlib import Path
 from typing import Annotated
 
@@ -13,6 +15,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
 from .services import ADAPTERS, AlgorithmError, algorithms
+from .video import process_video
 
 app = FastAPI(title="Inpainting Web")
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
@@ -225,10 +228,41 @@ def restore_batch(
     )
     return {"output": str(output), "processed": completed, "failures": failures}
 
+
+@app.post("/api/video-restore")
+async def video_restore(
+    video: Annotated[UploadFile, File()],
+    codeformer: Annotated[bool, Form()] = False,
+    rife: Annotated[bool, Form()] = False,
+    job_id: Annotated[str, Form()] = "",
+):
+    suffix = Path(video.filename or "video.mp4").suffix.lower()
+    if suffix not in {".mp4", ".mov", ".m4v", ".avi", ".mkv", ".webm"}:
+        raise HTTPException(400, "不支持的视频格式")
+    safe_job_id = re.sub(r"[^a-zA-Z0-9_-]", "", job_id)[:80] or str(int(time.time() * 1000))
+    output_name = f"{safe_job_id}-restored.mp4"
+    try:
+        with tempfile.TemporaryDirectory(prefix="linghui-upload-") as temporary:
+            input_path = Path(temporary) / f"input{suffix}"
+            with input_path.open("wb") as target:
+                while chunk := await video.read(1024 * 1024):
+                    target.write(chunk)
+            set_progress(job_id, "视频上传完成，正在检查媒体信息…", percent=3)
+            output = await asyncio.to_thread(
+                process_video, input_path, output_name, codeformer=codeformer, rife=rife,
+                progress=lambda message, percent: set_progress(job_id, message, percent=percent),
+            )
+        set_progress(job_id, "视频画质修复完成，可拖动滑竿对比。", done=True, percent=100)
+        return FileResponse(output, media_type="video/mp4", filename="restored.mp4")
+    except AlgorithmError as exc:
+        set_progress(job_id, f"处理失败：{exc}", done=True)
+        raise HTTPException(503, str(exc)) from exc
+    except Exception as exc:
+        set_progress(job_id, "视频处理失败，请检查文件和服务日志。", done=True)
+        raise HTTPException(500, "视频处理失败，请检查文件和服务日志。") from exc
+
 @app.post("/api/models/{model}/unload")
 def unload(model: str):
     if model not in ADAPTERS: raise HTTPException(404, "模型不存在")
     ADAPTERS[model].unload(); return {"ok": True}
-
-
 

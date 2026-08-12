@@ -139,6 +139,183 @@ $('task').onchange=()=>{$('inpaintOptions').hidden=$('task').value!=='inpaint';$
 })();
 </script>
 
+<style id="lh-video-restore-style">
+.video-restore-mode .grid{grid-template-columns:1fr;max-width:1160px}
+.video-restore-mode .panel,.video-restore-mode .canvas-wrap,.video-restore-mode .batch-view,.video-restore-mode .quality-batch-view,.video-restore-mode .stage>#file{display:none!important}
+.video-restore-mode .stage{grid-column:1;min-height:auto}
+.video-restore-view{display:none}
+.video-restore-mode .video-restore-view{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:28px}
+.video-workspace{min-width:0}
+.video-workspace h2{margin:0 0 8px;color:#172136;font:800 36px 'Space Grotesk','Noto Sans SC',system-ui;letter-spacing:-.045em}
+.video-workspace>p{margin:0 0 24px;color:#71839b;line-height:1.7}
+.video-drop{position:relative;display:grid;place-items:center;min-height:440px;padding:28px;border:1px dashed rgba(0,123,130,.3);border-radius:22px;background:radial-gradient(circle at 50% 28%,rgba(66,166,223,.12),transparent 34%),#f8fbfd;overflow:hidden}
+.video-drop.is-dragging{border-color:#007b82;box-shadow:0 18px 44px rgba(0,123,130,.12)}
+.video-drop__empty{display:grid;place-items:center;max-width:420px;text-align:center;color:#53697f;font-weight:700;cursor:pointer}
+.video-drop__empty:before{content:'▶';display:grid;place-items:center;width:74px;height:74px;margin-bottom:18px;border-radius:25px;background:linear-gradient(135deg,#007b82,#42a6df);color:#fff;font-size:26px;box-shadow:0 16px 30px rgba(0,123,130,.24)}
+.video-drop__empty small{display:block;margin-top:9px;color:#8998a8;font:500 12px 'DM Mono',monospace}
+.video-compare{position:relative;display:none;width:100%;overflow:hidden;border-radius:18px;background:#101923;box-shadow:0 18px 46px rgba(19,35,54,.18)}
+.video-drop.has-video{display:block;min-height:0;padding:0;border-style:solid;background:#101923}
+.video-drop.has-video .video-drop__empty{display:none}
+.video-drop.has-video .video-compare{display:block}
+.video-compare video{display:block;width:100%;height:auto;max-height:68vh;object-fit:contain;background:#101923}
+.video-compare__after{position:absolute;inset:0 auto 0 0;width:50%;overflow:hidden;border-right:3px solid #42a6df;pointer-events:none}
+.video-compare__after[hidden]{display:none}
+.video-compare__after video{position:absolute;inset:0 auto auto 0;width:var(--video-width,100%);max-width:none}
+.video-compare__handle{position:absolute;top:0;bottom:0;left:50%;width:0;display:grid;place-items:center;pointer-events:none}
+.video-compare__handle span{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:#007b82;color:#fff;box-shadow:0 10px 26px rgba(0,123,130,.34);font-size:18px}
+.video-compare__label{position:absolute;top:14px;padding:6px 10px;border-radius:999px;background:rgba(12,24,37,.72);color:#fff;font:600 12px 'Noto Sans SC',system-ui;pointer-events:none}
+.video-compare__label.before{left:14px}.video-compare__label.after{right:14px;background:rgba(0,123,130,.82)}
+.video-compare__range{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;opacity:0!important;cursor:ew-resize!important}
+.video-player-controls{display:none;grid-template-columns:44px 1fr auto;align-items:center;gap:12px;margin-top:12px;padding:10px 12px;border:1px solid #e4ebf1;border-radius:14px;background:#fff;box-shadow:0 8px 24px rgba(23,35,54,.06)}
+.video-drop.has-video+.video-player-controls{display:grid}
+.video-player-controls button{width:44px!important;height:38px!important;margin:0!important;padding:0!important;border-radius:999px!important}
+.video-player-controls input{height:24px;margin:0;padding:0;accent-color:#007b82;cursor:pointer}.video-player-controls input::-webkit-slider-runnable-track{height:5px;border-radius:99px;background:#dfe8ee}.video-player-controls input::-webkit-slider-thumb{margin-top:-5px}.video-time{color:#61758a;font:500 11px 'DM Mono',monospace;white-space:nowrap}
+.video-control{align-self:start;padding:22px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 12px 34px rgba(23,33,54,.06)}
+.video-control h3{margin:0 0 18px;color:#172136;font-size:16px}.video-control label{margin:15px 0 8px;font-size:12px;font-weight:700}
+.video-control input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.video-switch{display:flex!important;align-items:flex-start;gap:11px;padding:13px;margin:9px 0!important;border:1px solid #e5ebf2;border-radius:13px;cursor:pointer}
+.video-switch input{flex:0 0 auto;width:18px;height:18px;margin:1px 0 0;accent-color:#007b82}
+.video-switch span{color:#34495f;font-weight:700}.video-switch small{display:block;margin-top:4px;color:#8493a3;font-weight:500;line-height:1.5}
+.video-control button{width:100%;margin-top:18px}.video-control button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.video-progress{height:9px;margin:18px 0 12px;overflow:hidden;border-radius:99px;background:#e8eef3}.video-progress span{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#007b82,#42a6df);transition:width .3s ease}
+.video-status{min-height:42px;color:#487987;font-size:12px;line-height:1.6}
+.video-pipeline{display:grid;gap:8px;margin-top:18px}.video-pipeline div{display:flex;align-items:center;gap:9px;color:#8a98a6;font:500 11px 'DM Mono',monospace}.video-pipeline div:before{content:'';width:8px;height:8px;border-radius:50%;background:#d4dde5}.video-pipeline div.active{color:#007b82}.video-pipeline div.active:before{background:#42a6df;box-shadow:0 0 0 4px rgba(66,166,223,.13)}
+.video-pipeline div.skipped{text-decoration:line-through;opacity:.52}
+.video-download{display:none;margin-top:10px;padding:11px;border-radius:11px;background:#e8f8f7;color:#007b82;text-align:center;text-decoration:none;font-weight:700}.video-download.is-visible{display:block}
+@media(max-width:850px){.video-restore-mode .video-restore-view{grid-template-columns:1fr}.video-workspace h2{font-size:30px}.video-drop{min-height:330px}.video-control{order:-1}.video-compare__handle span{width:40px;height:40px}}
+</style>
+<script id="lh-video-restore">
+window.addEventListener('load', () => {
+  const navButton = document.createElement('button');
+  navButton.dataset.mode = 'video';
+  navButton.textContent = '视频修复';
+  document.querySelector('.top-nav button[data-mode="restore-batch"]')?.after(navButton);
+
+  const view = document.createElement('section');
+  view.className = 'video-restore-view';
+  view.innerHTML = `
+    <div class="video-workspace">
+      <h2>视频画质修复</h2>
+      <p>时序超分保留画面连续性，可按需修复人脸与提升帧率。完成后拖动滑竿查看同一帧的前后差异。</p>
+      <div class="video-drop" id="videoDrop">
+        <label class="video-drop__empty" for="videoFile">选择或拖入视频<small>MP4 · MOV · AVI · MKV · WEBM</small></label>
+        <div class="video-compare">
+          <video class="video-before" playsinline preload="metadata"></video>
+          <div class="video-compare__after" hidden><video class="video-after" muted playsinline preload="metadata"></video></div>
+          <span class="video-compare__label before">原视频</span><span class="video-compare__label after">修复后</span>
+          <div class="video-compare__handle"><span>↔</span></div>
+          <input class="video-compare__range" type="range" min="0" max="100" value="50" aria-label="对比原视频和修复后视频">
+        </div>
+      </div>
+      <div class="video-player-controls"><button type="button" aria-label="播放视频">▶</button><input type="range" min="0" max="1000" value="0" aria-label="视频进度"><span class="video-time">00:00 / 00:00</span></div>
+    </div>
+    <aside class="video-control">
+      <h3>处理选项</h3>
+      <input id="videoFile" type="file" accept="video/mp4,video/quicktime,video/x-m4v,video/x-msvideo,video/x-matroska,video/webm">
+      <label class="video-switch"><input id="videoCodeFormer" type="checkbox"><span>人脸修复<small>检测到人脸时使用 CodeFormer</small></span></label>
+      <label class="video-switch"><input id="videoRife" type="checkbox"><span>智能补帧<small>使用 RIFE 将原帧率提升 2 倍</small></span></label>
+      <button id="runVideoRestore" type="button" disabled>开始视频修复</button>
+      <div class="video-progress"><span></span></div><div class="video-status">请先选择视频</div>
+      <div class="video-pipeline"><div data-at="3">FFmpeg 解码</div><div data-at="24">RealBasicVSR</div><div data-at="58" data-option="codeformer">CodeFormer（可选）</div><div data-at="76" data-option="rife">RIFE（可选）</div><div data-at="90">FFmpeg 编码</div></div>
+      <a class="video-download" download="restored.mp4">下载修复视频</a>
+    </aside>`;
+  stage.append(view);
+  const homeCards = document.querySelector('.home-cards');
+  if (homeCards) {
+    const card = document.createElement('article');
+    card.className = 'home-card'; card.dataset.target = 'video';
+    card.innerHTML = '<span class="home-card__icon">▶</span><h3>视频画质修复</h3><p>RealBasicVSR 时序增强，可选人脸修复和智能补帧，支持滑竿同步对比。</p><span class="home-card__go">→</span>';
+    homeCards.append(card);
+  }
+  document.querySelector('.top-nav button[data-mode="home"]')?.addEventListener('click', () => {
+    batchCopy.textContent = '本地图像与视频工作台：面向去水印、画质增强、视频修复与批量处理的一站式本地工具。选择一个功能开始处理。';
+  });
+
+  const drop = view.querySelector('#videoDrop'), input = view.querySelector('#videoFile');
+  const before = view.querySelector('.video-before'), after = view.querySelector('.video-after');
+  const afterClip = view.querySelector('.video-compare__after'), handle = view.querySelector('.video-compare__handle');
+  const compareRange = view.querySelector('.video-compare__range'), run = view.querySelector('#runVideoRestore');
+  const progress = view.querySelector('.video-progress span'), status = view.querySelector('.video-status');
+  const download = view.querySelector('.video-download'), play = view.querySelector('.video-player-controls button');
+  const timeline = view.querySelector('.video-player-controls input'), time = view.querySelector('.video-time');
+  let selected, sourceUrl, resultUrl;
+
+  const hasAfterVideo = () => !afterClip.hidden && !!after.src && after.readyState >= HTMLMediaElement.HAVE_METADATA;
+  const setPlayingState = playing => {
+    play.textContent = playing ? '❚❚' : '▶';
+    play.setAttribute('aria-label', playing ? '暂停视频' : '播放视频');
+    play.title = playing ? '暂停' : '播放';
+  };
+
+  const setMode = enabled => {
+    appShell.classList.toggle('video-restore-mode', enabled);
+    if (enabled) {
+      appShell.classList.remove('home-mode', 'text-mode', 'restore-batch-mode');
+      document.querySelectorAll('.top-nav button').forEach(button => button.classList.toggle('active', button === navButton));
+    } else { before.pause(); after.pause(); }
+  };
+  navButton.addEventListener('click', () => requestAnimationFrame(() => setMode(true)));
+  document.querySelector('.top-nav').addEventListener('click', event => { if (event.target !== navButton) setMode(false); });
+
+  const formatTime = value => {
+    if (!Number.isFinite(value)) return '00:00';
+    const minutes = Math.floor(value / 60), seconds = Math.floor(value % 60);
+    return String(minutes).padStart(2,'0') + ':' + String(seconds).padStart(2,'0');
+  };
+  const syncVideoWidth = () => view.querySelector('.video-compare').style.setProperty('--video-width', before.clientWidth + 'px');
+  new ResizeObserver(syncVideoWidth).observe(before);
+  const loadVideo = file => {
+    if (!file || (!file.type.startsWith('video/') && !/\.(mp4|mov|m4v|avi|mkv|webm)$/i.test(file.name))) { status.textContent = '请选择支持的视频文件'; return; }
+    selected = file;
+    if (sourceUrl) URL.revokeObjectURL(sourceUrl);
+    sourceUrl = URL.createObjectURL(file);
+    before.pause(); after.pause(); before.src = sourceUrl; before.load();
+    after.removeAttribute('src'); after.load(); setPlayingState(false);
+    afterClip.hidden = true; drop.classList.add('has-video'); run.disabled = false;
+    status.textContent = `${file.name} · ${(file.size / 1048576).toFixed(1)} MB`;
+    download.classList.remove('is-visible'); progress.style.width = '0%';
+  };
+  input.addEventListener('change', () => loadVideo(input.files[0]));
+  ['dragenter','dragover'].forEach(type => drop.addEventListener(type, event => { event.preventDefault(); drop.classList.add('is-dragging'); }));
+  ['dragleave','dragend'].forEach(type => drop.addEventListener(type, () => drop.classList.remove('is-dragging')));
+  drop.addEventListener('drop', event => { event.preventDefault(); drop.classList.remove('is-dragging'); loadVideo([...event.dataTransfer.files].find(file => file.type.startsWith('video/') || /\.(mp4|mov|m4v|avi|mkv|webm)$/i.test(file.name))); });
+
+  const setCompare = value => { const position = Math.max(0, Math.min(100, Number(value))); afterClip.style.width = position + '%'; handle.style.left = position + '%'; compareRange.value = position; };
+  compareRange.addEventListener('input', event => setCompare(event.target.value));
+  before.addEventListener('loadedmetadata', () => { timeline.value = 0; time.textContent = `00:00 / ${formatTime(before.duration)}`; syncVideoWidth(); });
+  before.addEventListener('play', () => { if (hasAfterVideo()) { after.currentTime = before.currentTime; after.play().catch(() => {}); } setPlayingState(true); });
+  before.addEventListener('pause', () => { after.pause(); setPlayingState(false); });
+  before.addEventListener('timeupdate', () => { timeline.value = before.duration ? before.currentTime / before.duration * 1000 : 0; time.textContent = `${formatTime(before.currentTime)} / ${formatTime(before.duration)}`; if (hasAfterVideo() && Math.abs(after.currentTime - before.currentTime) > .08) after.currentTime = before.currentTime; });
+  play.addEventListener('click', () => before.paused ? before.play() : before.pause());
+  timeline.addEventListener('input', () => { if (!Number.isFinite(before.duration)) return; before.currentTime = before.duration * timeline.value / 1000; if (hasAfterVideo()) after.currentTime = before.currentTime; });
+
+  const setProgress = value => {
+    progress.style.width = Math.max(0, Math.min(100, Number(value) || 0)) + '%';
+    view.querySelectorAll('.video-pipeline div').forEach(item => item.classList.toggle('active', !item.classList.contains('skipped') && Number(item.dataset.at) <= value));
+  };
+  run.addEventListener('click', async () => {
+    if (!selected) return;
+    const data = new FormData(), jobId = 'video-' + Date.now() + '-' + Math.random().toString(16).slice(2);
+    const useCodeFormer = view.querySelector('#videoCodeFormer').checked, useRife = view.querySelector('#videoRife').checked;
+    data.append('video', selected); data.append('codeformer', useCodeFormer); data.append('rife', useRife); data.append('job_id', jobId);
+    view.querySelector('[data-option="codeformer"]').classList.toggle('skipped', !useCodeFormer);
+    view.querySelector('[data-option="rife"]').classList.toggle('skipped', !useRife);
+    run.disabled = true; status.textContent = '正在上传视频…'; setProgress(1); download.classList.remove('is-visible');
+    let events;
+    try {
+      events = new EventSource('/api/progress/' + encodeURIComponent(jobId));
+      events.onmessage = event => { const state = JSON.parse(event.data); status.textContent = state.message; setProgress(state.percent || 0); if (state.done) events.close(); };
+      const response = await fetch('/api/video-restore', {method:'POST', body:data});
+      if (!response.ok) throw Error(await readErrorMessage(response));
+      const blob = await response.blob(); if (resultUrl) URL.revokeObjectURL(resultUrl); resultUrl = URL.createObjectURL(blob);
+      after.src = resultUrl; after.load(); after.addEventListener('loadedmetadata', () => { after.currentTime = before.currentTime; }, {once:true}); afterClip.hidden = false; setCompare(50); setProgress(100);
+      download.href = resultUrl; download.classList.add('is-visible'); status.textContent = '修复完成，可播放并拖动滑竿对比。';
+    } catch (error) { status.textContent = '处理失败：' + error.message; }
+    finally { events?.close(); run.disabled = false; }
+  });
+});
+</script>
+
 <style id="lh-responsive-preview-and-batch-restore-style">
 /* Let the preview follow the image aspect ratio instead of clipping it into a
    fixed-height viewport. The intrinsic canvas size is still capped by the
