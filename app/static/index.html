@@ -140,15 +140,17 @@ $('task').onchange=()=>{$('inpaintOptions').hidden=$('task').value!=='inpaint';$
 </script>
 
 <style id="lh-video-restore-style">
-.video-restore-mode .grid{grid-template-columns:1fr;max-width:1160px}
+.video-restore-mode .grid{grid-template-columns:1fr;width:100%;max-width:1920px}
 .video-restore-mode .panel,.video-restore-mode .canvas-wrap,.video-restore-mode .batch-view,.video-restore-mode .quality-batch-view,.video-restore-mode .stage>#file{display:none!important}
-.video-restore-mode .stage{grid-column:1;min-height:auto}
+.video-restore-mode .stage{grid-column:1;width:100%;min-height:auto}
+.video-restore-mode .stage:before{content:'VIDEO RESTORATION PIPELINE';display:block}
 .video-restore-view{display:none}
-.video-restore-mode .video-restore-view{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:28px}
+.video-restore-mode .video-restore-view{display:grid;grid-template-columns:minmax(0,1fr) clamp(340px,23vw,400px);gap:clamp(24px,2.2vw,40px);align-items:start}
 .video-workspace{min-width:0}
 .video-workspace h2{margin:0 0 8px;color:#172136;font:800 36px 'Space Grotesk','Noto Sans SC',system-ui;letter-spacing:-.045em}
 .video-workspace>p{margin:0 0 24px;color:#71839b;line-height:1.7}
 .video-drop{position:relative;display:grid;place-items:center;min-height:440px;padding:28px;border:1px dashed rgba(0,123,130,.3);border-radius:22px;background:radial-gradient(circle at 50% 28%,rgba(66,166,223,.12),transparent 34%),#f8fbfd;overflow:hidden}
+.video-drop:not(.has-video){min-height:0;aspect-ratio:16/9}
 .video-drop.is-dragging{border-color:#007b82;box-shadow:0 18px 44px rgba(0,123,130,.12)}
 .video-drop__empty{display:grid;place-items:center;max-width:420px;text-align:center;color:#53697f;font-weight:700;cursor:pointer}
 .video-drop__empty:before{content:'▶';display:grid;place-items:center;width:74px;height:74px;margin-bottom:18px;border-radius:25px;background:linear-gradient(135deg,#007b82,#42a6df);color:#fff;font-size:26px;box-shadow:0 16px 30px rgba(0,123,130,.24)}
@@ -170,7 +172,7 @@ $('task').onchange=()=>{$('inpaintOptions').hidden=$('task').value!=='inpaint';$
 .video-drop.has-video+.video-player-controls{display:grid}
 .video-player-controls button{width:44px!important;height:38px!important;margin:0!important;padding:0!important;border-radius:999px!important}
 .video-player-controls input{height:24px;margin:0;padding:0;accent-color:#007b82;cursor:pointer}.video-player-controls input::-webkit-slider-runnable-track{height:5px;border-radius:99px;background:#dfe8ee}.video-player-controls input::-webkit-slider-thumb{margin-top:-5px}.video-time{color:#61758a;font:500 11px 'DM Mono',monospace;white-space:nowrap}
-.video-control{align-self:start;padding:22px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 12px 34px rgba(23,33,54,.06)}
+.video-control{position:sticky;top:24px;align-self:start;padding:22px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 12px 34px rgba(23,33,54,.06)}
 .video-control h3{margin:0 0 18px;color:#172136;font-size:16px}.video-control label{margin:15px 0 8px;font-size:12px;font-weight:700}
 .video-control input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .video-switch{display:flex!important;align-items:flex-start;gap:11px;padding:13px;margin:9px 0!important;border:1px solid #e5ebf2;border-radius:13px;cursor:pointer}
@@ -182,7 +184,7 @@ $('task').onchange=()=>{$('inpaintOptions').hidden=$('task').value!=='inpaint';$
 .video-pipeline{display:grid;gap:8px;margin-top:18px}.video-pipeline div{display:flex;align-items:center;gap:9px;color:#8a98a6;font:500 11px 'DM Mono',monospace}.video-pipeline div:before{content:'';width:8px;height:8px;border-radius:50%;background:#d4dde5}.video-pipeline div.active{color:#007b82}.video-pipeline div.active:before{background:#42a6df;box-shadow:0 0 0 4px rgba(66,166,223,.13)}
 .video-pipeline div.skipped{text-decoration:line-through;opacity:.52}
 .video-download{display:none;margin-top:10px;padding:11px;border-radius:11px;background:#e8f8f7;color:#007b82;text-align:center;text-decoration:none;font-weight:700}.video-download.is-visible{display:block}
-@media(max-width:850px){.video-restore-mode .video-restore-view{grid-template-columns:1fr}.video-workspace h2{font-size:30px}.video-drop{min-height:330px}.video-control{order:-1}.video-compare__handle span{width:40px;height:40px}}
+@media(max-width:850px){.video-restore-mode .video-restore-view{grid-template-columns:1fr}.video-workspace h2{font-size:30px}.video-drop{min-height:330px}.video-drop:not(.has-video){aspect-ratio:auto}.video-control{position:static;order:-1}.video-compare__handle span{width:40px;height:40px}}
 </style>
 <script id="lh-video-restore">
 window.addEventListener('load', () => {
@@ -195,8 +197,6 @@ window.addEventListener('load', () => {
   view.className = 'video-restore-view';
   view.innerHTML = `
     <div class="video-workspace">
-      <h2>视频画质修复</h2>
-      <p>时序超分保留画面连续性，可按需修复人脸与提升帧率。完成后拖动滑竿查看同一帧的前后差异。</p>
       <div class="video-drop" id="videoDrop">
         <label class="video-drop__empty" for="videoFile">选择或拖入视频<small>MP4 · MOV · AVI · MKV · WEBM</small></label>
         <div class="video-compare">
